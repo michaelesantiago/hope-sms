@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { @apply bg-slate-50 text-slate-900; min-height: 100vh; }
+  #root { min-height: 100vh; display: flex; flex-direction: column; }
+}
+
+@layer components {
+  .auth-card { @apply bg-white rounded-2xl shadow-lg border border-slate-100 p-8 w-full max-w-md mx-auto; }
+  .form-input { @apply w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-hope-500 focus:border-transparent transition duration-150; }
+  .form-input.error { @apply border-red-400 focus:ring-red-400; }
+  .form-label { @apply block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5; }
+  .btn-primary { @apply w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-hope-600 hover:bg-hope-700 text-white text-sm font-semibold transition duration-150 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-secondary { @apply w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold border border-slate-200 transition duration-150 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed; }
+  .alert-error { @apply flex items-start gap-3 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm; }
+  .alert-info { @apply flex items-start gap-3 p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-sm; }
+  .or-divider { @apply flex items-center gap-3 text-xs text-slate-400 font-medium my-4; }
+  .or-divider::before, .or-divider::after { content:''; @apply flex-1 h-px bg-slate-200; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { display:inline-block; width:1.25rem; height:1.25rem; border:2px solid currentColor; border-top-color:transparent; border-radius:50%; animation:spin 0.7s linear infinite; }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.page-enter { animation: fadeIn 0.25s ease forwards; }
