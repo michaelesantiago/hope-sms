@@ -15,15 +15,17 @@
 
 <br/>
 
-[![Sprint](https://img.shields.io/badge/Sprint-1%20Complete-2ea44f?style=flat-square)](https://github.com/michaelesantiago/hope-sms)
-[![Gate](https://img.shields.io/badge/Gate-56%2F56%20Passed-2ea44f?style=flat-square)](./docs/sprint1_gate_checklist.md)
+[![Sprint 1](https://img.shields.io/badge/Sprint_1-Complete-2ea44f?style=flat-square)](https://github.com/michaelesantiago/hope-sms)
+[![Sprint 2](https://img.shields.io/badge/Sprint_2-Complete-2ea44f?style=flat-square)](https://github.com/michaelesantiago/hope-sms)
+[![Sprint 3](https://img.shields.io/badge/Sprint_3-Complete-2ea44f?style=flat-square)](https://github.com/michaelesantiago/hope-sms)
+[![Live](https://img.shields.io/badge/Live-hopesms--chi.vercel.app-0070f3?style=flat-square&logo=vercel)](https://hopesms-chi.vercel.app)
 [![License](https://img.shields.io/badge/License-Academic-blue?style=flat-square)]()
 
 <br/>
 
 > 📚 **BS Information Technology** · New Era University – College of Computer Studies
 > Information Management Course · Academic Year 2025–2026
-> Prepared by: **Jeremias C. Esperanza**
+> Instructor: **Jeremias C. Esperanza**
 
 </div>
 
@@ -32,6 +34,7 @@
 ## 📋 Table of Contents
 
 - [About the Project](#-about-the-project)
+- [Live Demo](#-live-demo)
 - [Team Members](#-team-members)
 - [Technology Stack](#-technology-stack)
 - [System Features](#-system-features)
@@ -55,6 +58,19 @@ The **Hope, Inc. Sales Management System (HMS)** is a capstone web application d
 - Implements **soft-delete** — no record is ever permanently removed from the database
 - Uses **four reference tables** (customer, employee, product, priceHist) as read-only lookups
 - Supports **Google OAuth** and email/password authentication with automatic account provisioning
+- Provides **4 analytics charts** via a dedicated Reports page powered by SQL views
+- Includes **User Management** for SUPERADMIN to activate, deactivate, and assign roles
+
+---
+
+## 🌐 Live Demo
+
+| Environment | URL |
+|-------------|-----|
+| **Production** | [https://hopesms-chi.vercel.app](https://hopesms-chi.vercel.app) |
+| **Local Dev** | http://localhost:5173 |
+
+> 🔐 New users must register and wait for SUPERADMIN activation before accessing the system.
 
 ---
 
@@ -62,10 +78,10 @@ The **Hope, Inc. Sales Management System (HMS)** is a capstone web application d
 
 | # | Name | Role | Responsibilities |
 |---|------|------|-----------------|
-| **M1** | Santiago, Michael E. | Project Lead / Full-Stack Developer | Sprint coordination, GitHub management, Supabase setup, API wiring, routing, deployment |
-| **M2** | Velasco, Crisglynver G. | Frontend Developer (UI/UX) | All React pages, modals, lookup pages, reports pages, responsive design |
-| **M3** | Bachiler, Ranezet Vhon | Backend / Database Engineer | Schema, migrations, RLS policies, triggers, SQL views |
-| **M4** | Manilag, Sebastian Andrew N. | Rights & Auth Specialist | AuthContext, rights gating, Google OAuth, login guard, account activation |
+| **M1** | Santiago, Michael E. | Project Lead / Full-Stack Developer | Sprint coordination, GitHub management, Supabase setup, API services, routing, Vercel deployment |
+| **M2** | Velasco, Crisglynver G. | Frontend Developer (UI/UX) | All React pages, modals, lookup pages, reports charts, admin page, responsive design |
+| **M3** | Bachiler, Ranezet Vhon | Backend / Database Engineer | Schema, migrations, RLS policies, triggers, SQL views (sales_with_lookup, salesdetail_with_product, monthly_sales_trend, sales_by_customer, top_products_sold) |
+| **M4** | Manilag, Sebastian Andrew N. | Rights & Auth Specialist | AuthContext, RightsContext, 13-right gating, Google OAuth, login guard, account activation |
 | **M5** | Loterte, Justine R. | QA / Documentation | Test cases, rights matrix, user manual, sprint logs, presentation |
 
 ---
@@ -76,12 +92,13 @@ The **Hope, Inc. Sales Management System (HMS)** is a capstone web application d
 |-------|-----------|---------|
 | **Frontend** | React 18 + Vite 5 | Single-page application, component-based UI |
 | **Styling** | Tailwind CSS 3 | Utility-first responsive design system |
-| **Backend / DB** | Supabase (PostgreSQL) | Database, Auth, RLS Policies, Triggers, Functions |
+| **Charts** | Recharts | Bar charts and pie chart for Reports page |
+| **Backend / DB** | Supabase (PostgreSQL) | Database, Auth, RLS Policies, Triggers, Functions, Views |
 | **Authentication** | Supabase Auth | Email/password + Google OAuth 2.0 sign-in |
 | **State Management** | React Context API | Global auth session and user rights map |
 | **Version Control** | Git + GitHub | Source control, branching, pull requests |
 | **Testing** | Vitest + React Testing Library | Unit and integration test suite |
-| **Deployment** | Vercel / Netlify | Free-tier production hosting *(Sprint 3)* |
+| **Deployment** | Vercel | Production hosting at hopesms-chi.vercel.app |
 
 ---
 
@@ -95,53 +112,76 @@ The **Hope, Inc. Sales Management System (HMS)** is a capstone web application d
 - Admin activation workflow before users can access the system
 
 ### 📊 Sales Management *(Sprint 2)*
-- Full CRUD on sales transactions (transNo, salesDate, customer, employee)
+- Full CRUD on sales transactions (transno, salesdate, customer, employee)
 - Full CRUD on sales detail line items (product, quantity, unit price)
 - Customer and employee dropdown lookups on sales forms
 - Product dropdown with automatic price lookup from price history
 - Soft-delete with cascade — deleting a sale hides all its line items
+- Stamp audit trail on every create, update, delete, and recover operation
 
 ### 👁 Role-Based Visibility
 - `USER` accounts see only `ACTIVE` records across all views
 - `ADMIN` and `SUPERADMIN` see all records including deleted items
+- Stamp column hidden from USER accounts
 - Deleted Items panel (tabbed: Transactions / Line Items) for ADMIN+
 - Recovery of soft-deleted records by ADMIN and SUPERADMIN
 
+### 📋 Lookup Pages *(Read-only)*
+- Customer Lookup — 82 customers with search
+- Employee Lookup — 32 employees with hire/sep dates
+- Product Lookup — 57 products with unit
+- Price History Lookup — 79 price entries
+
 ### 📈 Reports *(Sprint 3)*
-- Sales summary by employee
-- Sales summary by customer
-- Top products sold
-- Monthly sales trend
+- **Summary stats** — Total Revenue (₱689,740.53), 124 Transactions, 1,797 Units Sold
+- **Monthly Sales Trend** — bar chart from `monthly_sales_trend` SQL view
+- **Top 5 Customers** — horizontal bar from `sales_by_customer` SQL view
+- **Top 5 Products** — horizontal bar from `top_products_sold` SQL view
+- **Transactions by Sales Agent** — donut pie chart from `sales_with_lookup`
 
 ### 🛡 Admin Module *(Sprint 3)*
-- User activation and deactivation
+- List all users with role, status, full name, and email
+- Activate / Deactivate user accounts (with stamp audit trail)
+- SUPERADMIN can change user roles between USER and ADMIN
 - SUPERADMIN accounts are fully protected — cannot be modified by anyone
+- Gated by `ADM_USER` right
 
 ---
 
 ## 🗄 Database Design
 
-The system uses **6 HopeDB tables** plus **5 rights/auth tables** (11 total).
+The system uses **6 HopeDB tables** + **5 SQL views** + **rights/auth tables**.
 
 ### HopeDB Tables
 
 | Table | Role | CRUD / Lookup | Seed Records |
 |-------|------|--------------|--------------|
 | `sales` | Primary — sales transactions | Full CRUD (soft-delete) | 124 transactions |
-| `salesDetail` | Primary — line items | Full CRUD (soft-delete) | ~310 line items |
-| `customer` | Lookup only — customer dropdown | SELECT only | 82 customers |
-| `employee` | Lookup only — employee dropdown | SELECT only | 31 employees |
-| `product` | Lookup only — product dropdown | SELECT only | 52 products |
-| `priceHist` | Lookup only — unit price auto-fill | SELECT only | ~70 price entries |
+| `salesdetail` | Primary — line items | Full CRUD (soft-delete) | ~310 line items |
+| `customer` | Lookup only | SELECT only | 82 customers |
+| `employee` | Lookup only | SELECT only | 32 employees |
+| `product` | Lookup only | SELECT only | 57 products |
+| `pricehist` | Lookup only — unit price auto-fill | SELECT only | 79 price entries |
+
+### SQL Views
+
+| View | Purpose |
+|------|---------|
+| `sales_with_lookup` | Sales joined with customer and employee names |
+| `salesdetail_with_product` | Line items joined with product description and unit price |
+| `monthly_sales_trend` | Revenue and transaction count grouped by month |
+| `sales_by_customer` | Total revenue ranked by customer |
+| `top_products_sold` | Total qty and revenue ranked by product |
 
 ### Critical Design Decisions
 
 ```
-✅  record_status and stamp columns added to sales and salesDetail ONLY
-✅  customer, employee, product, priceHist — ZERO structural changes
-✅  Cascade soft-delete trigger: sales INACTIVE → all salesDetail INACTIVE
-✅  Cascade recovery: sales ACTIVE → all salesDetail ACTIVE
+✅  record_status and stamp columns added to sales and salesdetail ONLY
+✅  customer, employee, product, pricehist — ZERO structural changes
+✅  Cascade soft-delete trigger: sales INACTIVE → all salesdetail INACTIVE
+✅  Cascade recovery: sales ACTIVE → all salesdetail ACTIVE
 ✅  No DELETE keyword anywhere in application code or database functions
+✅  All column names are lowercase (PostgreSQL standard)
 ```
 
 ---
@@ -208,37 +248,6 @@ VITE_SUPABASE_ANON_KEY=your-anon-public-key-here
 
 > ⚠️ **Never commit `.env.local`** — it is already excluded by `.gitignore`
 
-### Database Setup
-
-Run the SQL migrations **in order** inside the Supabase SQL Editor:
-
-```sql
--- Step 1: Create all 6 HopeDB tables
-db/migrations/001_initial_schema.sql
-
--- Step 2: Seed modules, rights, and SUPERADMIN account
-db/migrations/002_rights_seed.sql
-
--- Step 3: Create the auto-provision trigger for new users
-db/migrations/003_trigger_provision_user.sql
-
--- Step 4: Verify row counts and FK integrity (run after seeding HopeDB data)
-db/migrations/004_verify_seed.sql
-```
-
-Then seed the full HopeDB dataset (employees, customers, products, sales, salesDetail, priceHist, payments) from the original `HopeDB.sql` file.
-
-### Google OAuth Setup
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com) → Credentials
-2. Create or use an existing **OAuth 2.0 Client ID** (Web application)
-3. Add to **Authorized Redirect URIs**:
-   ```
-   https://your-project-id.supabase.co/auth/v1/callback
-   http://localhost:5173/auth/callback
-   ```
-4. In Supabase → Authentication → Providers → **Google** → paste Client ID and Secret
-
 ### Run the Application
 
 ```bash
@@ -259,6 +268,15 @@ npm test
 npm run test:coverage
 ```
 
+### Production Deployment
+
+The app is deployed on **Vercel** at [https://hopesms-chi.vercel.app](https://hopesms-chi.vercel.app).
+
+To redeploy after changes:
+```bash
+vercel --prod
+```
+
 ---
 
 ## 📁 Project Structure
@@ -266,56 +284,63 @@ npm run test:coverage
 ```
 hope-sms/
 │
-├── 📁 .github/
-│   └── PULL_REQUEST_TEMPLATE.md     # PR checklist enforcing SMS rules
-│
-├── 📁 db/
-│   └── 📁 migrations/
-│       ├── 001_initial_schema.sql   # All 6 HopeDB tables
-│       ├── 002_rights_seed.sql      # Modules, rights, SUPERADMIN
-│       ├── 003_trigger_provision_user.sql  # Auto-provision trigger
-│       └── 004_verify_seed.sql      # Row count & FK integrity checks
-│
-├── 📁 docs/
-│   ├── db_erd.md                    # ERD — all 11 tables documented
-│   ├── sprint1_log.md               # Sprint 1 Week 1 progress log
-│   ├── sprint1_week2_log.md         # Sprint 1 Week 2 progress log
-│   └── sprint1_gate_checklist.md   # 56-criteria gate — all passed ✅
-│
 ├── 📁 src/
 │   ├── 📁 components/
 │   │   ├── 📁 auth/
-│   │   │   └── ProtectedRoute.jsx   # Blocks unauthenticated access
-│   │   └── 📁 layout/
-│   │       └── AppShell.jsx         # Sidebar + Navbar layout wrapper
+│   │   │   ├── ProtectedRoute.jsx       # Blocks unauthenticated access
+│   │   │   └── AdminRoute.jsx           # Blocks non-ADMIN/SUPERADMIN
+│   │   ├── 📁 layout/
+│   │   │   └── AppShell.jsx             # Sidebar + responsive layout
+│   │   ├── 📁 sales/
+│   │   │   ├── AddSaleModal.jsx         # Create transaction modal
+│   │   │   ├── EditSaleModal.jsx        # Edit transaction modal
+│   │   │   ├── AddLineItemModal.jsx     # Add line item + price autofill
+│   │   │   └── EditLineItemModal.jsx    # Edit line item modal
+│   │   └── 📁 ui/
+│   │       └── index.jsx                # LoadingSpinner, EmptyState, Modal, etc.
 │   │
 │   ├── 📁 contexts/
-│   │   └── AuthContext.jsx          # Global auth state + login guard
+│   │   ├── AuthContext.jsx              # Global auth state + login guard
+│   │   └── RightsContext.jsx           # 13-right map loaded on login
 │   │
 │   ├── 📁 pages/
 │   │   ├── 📁 auth/
-│   │   │   ├── LoginPage.jsx        # Email + Google OAuth login
-│   │   │   ├── RegisterPage.jsx     # Registration with confirmation
-│   │   │   └── AuthCallbackPage.jsx # OAuth redirect handler
-│   │   └── PlaceholderPages.jsx     # Sprint 2 & 3 pages (coming soon)
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   └── AuthCallbackPage.jsx
+│   │   ├── 📁 sales/
+│   │   │   ├── SalesListPage.jsx        # 124 transactions with CRUD
+│   │   │   └── SalesDetailPage.jsx      # Transaction header + line items
+│   │   ├── 📁 lookups/
+│   │   │   └── LookupPages.jsx          # 4 read-only lookup pages
+│   │   ├── 📁 reports/
+│   │   │   └── ReportsPage.jsx          # 4 charts + 3 summary stats
+│   │   ├── 📁 admin/
+│   │   │   ├── AdminPage.jsx            # User management
+│   │   │   └── DeletedItemsPage.jsx     # Soft-deleted items recovery
+│   │   └── PlaceholderPages.jsx         # Re-exports Reports + Admin
 │   │
 │   ├── 📁 services/
-│   │   ├── supabaseClient.js        # Supabase JS client initialization
-│   │   └── authService.js           # All auth functions (email + Google)
+│   │   ├── supabaseClient.js            # Supabase JS client
+│   │   ├── authService.js               # Auth functions
+│   │   ├── salesService.js              # Sales CRUD + soft-delete
+│   │   ├── salesDetailService.js        # Line items CRUD + soft-delete
+│   │   ├── lookupService.js             # Read-only lookups
+│   │   ├── reportsService.js            # 3 SQL view queries
+│   │   └── adminService.js              # User management functions
 │   │
 │   └── 📁 test/
-│       ├── setup.js                 # Vitest + jest-dom configuration
-│       ├── sprint1-auth-flows.test.jsx  # 10 auth test cases
-│       └── 📁 __mocks__/
-│           └── supabaseClient.js    # Supabase mock (no real API calls)
+│       ├── setup.js
+│       ├── sprint1-auth-flows.test.jsx   # 10 auth test cases
+│       ├── sprint2-cascade-visibility.test.js
+│       └── sprint2-rights-39-cases.test.js
 │
-├── .env.example                     # Environment variable template
-├── .gitignore                       # Excludes .env.local, node_modules
-├── index.html                       # App entry point
-├── package.json                     # Dependencies and scripts
-├── tailwind.config.js               # Tailwind + custom hope-* colors
-├── vite.config.js                   # Vite + Vitest configuration
-└── README.md                        # This file
+├── vercel.json                          # SPA rewrite rule for Vercel
+├── .env.example                         # Environment variable template
+├── .nvmrc                               # Node version (24)
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
 ---
@@ -337,19 +362,6 @@ main ─────────────────────────
         └─► chore/vercel-deploy            Config & tooling
 ```
 
-### Branch Naming Convention
-
-| Prefix | When to Use | Example |
-|--------|-------------|---------|
-| `feat/` | New feature | `feat/ui-sales-list` |
-| `fix/` | Bug fix | `fix/cascade-trigger-recovery` |
-| `db/` | DB schema, RLS, trigger, view | `db/rls-sales-select` |
-| `test/` | Test files | `test/rights-39-cases` |
-| `docs/` | Documentation | `docs/user-manual-draft` |
-| `chore/` | Config, tooling, deployment | `chore/vercel-deploy` |
-
-> **Rule:** Never push directly to `main` or `dev`. All changes go through a Pull Request reviewed by at least one teammate.
-
 ---
 
 ## 📅 Sprint Progress
@@ -360,7 +372,7 @@ main ─────────────────────────
 |-------------|--------|--------|
 | Vite + React 18 + Tailwind CSS scaffold | M1 | ✅ Done |
 | Supabase JS client + environment config | M1 | ✅ Done |
-| React Router v6 + ProtectedRoute + all 9 routes | M1 | ✅ Done |
+| React Router v6 + ProtectedRoute + all routes | M1 | ✅ Done |
 | GitHub repo + branch protection + PR template | M1 | ✅ Done |
 | Login page — email + Google OAuth | M2 | ✅ Done |
 | Register page — 6 fields + confirmation screen | M2 | ✅ Done |
@@ -368,7 +380,7 @@ main ─────────────────────────
 | /auth/callback — OAuth redirect handler | M2 | ✅ Done |
 | All 6 HopeDB tables + record_status/stamp | M3 | ✅ Done |
 | 4 modules + 13 rights + SUPERADMIN seeded | M3 | ✅ Done |
-| ERD diagram — docs/db_erd.md | M3 | ✅ Done |
+| ERD diagram | M3 | ✅ Done |
 | AuthContext + login guard | M4 | ✅ Done |
 | Google OAuth configured | M4 | ✅ Done |
 | provision_new_user() trigger | M4 | ✅ Done |
@@ -379,33 +391,45 @@ main ─────────────────────────
 
 ---
 
-### Sprint 2 — Weeks 3 & 4 🔄 In Progress
+### Sprint 2 — Weeks 3 & 4 ✅ Complete
 
-| Focus | Member | Status |
-|-------|--------|--------|
-| Sales + salesDetail API service functions | M1 | 🔄 In Progress |
-| UserRightsContext + route guards | M1 | 🔄 In Progress |
-| SalesListPage + CRUD modals | M2 | 🔄 In Progress |
-| SalesDetailPage + line items | M2 | 🔄 In Progress |
-| 4 read-only lookup pages | M2 | 🔄 In Progress |
-| DeletedItemsPage | M2 | 🔄 In Progress |
-| RLS policies for sales + salesDetail | M3 | 🔄 In Progress |
-| Cascade soft-delete trigger | M3 | 🔄 In Progress |
-| SQL views for enriched data | M3 | 🔄 In Progress |
-| UserRightsContext + 13-right gating | M4 | 🔄 In Progress |
-| 39-case rights test matrix | M5 | 🔄 In Progress |
+| Deliverable | Member | Status |
+|-------------|--------|--------|
+| salesService.js — full CRUD + soft-delete + recover | M1 | ✅ Done |
+| salesDetailService.js — full CRUD + soft-delete + recover | M1 | ✅ Done |
+| RightsContext — 13-right map loaded on login | M1 | ✅ Done |
+| AdminRoute guard | M1 | ✅ Done |
+| SalesListPage — table + search + CRUD modals | M2 | ✅ Done |
+| SalesDetailPage — header + line items + modals | M2 | ✅ Done |
+| AddSaleModal + EditSaleModal | M2 | ✅ Done |
+| AddLineItemModal + EditLineItemModal (price autofill) | M2 | ✅ Done |
+| DeletedItemsPage — tabbed transactions + line items | M2 | ✅ Done |
+| 4 read-only lookup pages | M2 | ✅ Done |
+| sales_with_lookup SQL view | M3 | ✅ Done |
+| salesdetail_with_product SQL view | M3 | ✅ Done |
+| Cascade soft-delete trigger | M3 | ✅ Done |
+| RLS policies for sales + salesdetail | M3 | ✅ Done |
+| 13-right gating on all CRUD buttons | M4 | ✅ Done |
+| Stamp visibility gated by user type | M4 | ✅ Done |
+| 39-case rights test matrix | M5 | ✅ Done |
+| Cascade visibility test suite | M5 | ✅ Done |
 
 ---
 
-### Sprint 3 — Weeks 5 & 6 ⏳ Upcoming
+### Sprint 3 — Weeks 5 & 6 ✅ Complete
 
-| Focus | Member |
-|-------|--------|
-| 4 report pages + admin API | M1 |
-| Reports UI + admin user management | M2 |
-| 4 report SQL views + admin RLS | M3 |
-| Full rights regression + SUPERADMIN guard | M4 |
-| E2E production tests + User Manual | M5 |
+| Deliverable | Member | Status |
+|-------------|--------|--------|
+| reportsService.js — 3 SQL view queries | M1 | ✅ Done |
+| adminService.js — getUsers, activate, deactivate, changeRole | M1 | ✅ Done |
+| Vercel production deployment | M1 | ✅ Done |
+| ReportsPage — 4 charts + 3 summary stats | M2 | ✅ Done |
+| AdminPage — user management with role control | M2 | ✅ Done |
+| monthly_sales_trend SQL view | M3 | ✅ Done |
+| sales_by_customer SQL view | M3 | ✅ Done |
+| top_products_sold SQL view | M3 | ✅ Done |
+| SUPERADMIN protection — UI + DB level | M4 | ✅ Done |
+| ADM_USER right gating on Admin page | M4 | ✅ Done |
 
 ---
 
@@ -414,34 +438,24 @@ main ─────────────────────────
 | # | Rule | Detail |
 |---|------|--------|
 | 1 | **No hard deletes** | The `DELETE` keyword must never appear in any application code, Supabase function, or RLS policy |
-| 2 | **Soft-delete only** | All removals set `record_status = 'INACTIVE'` on the sales or salesDetail row |
-| 3 | **Cascade soft-delete** | Soft-deleting a `sales` row sets ALL its `salesDetail` rows to `INACTIVE` in the same operation |
+| 2 | **Soft-delete only** | All removals set `record_status = 'INACTIVE'` on the sales or salesdetail row |
+| 3 | **Cascade soft-delete** | Soft-deleting a `sales` row sets ALL its `salesdetail` rows to `INACTIVE` |
 | 4 | **INACTIVE = invisible to USER** | USER accounts never see INACTIVE records in any view, list, or lookup |
-| 5 | **Lookup tables are read-only** | `customer`, `employee`, `product`, `priceHist` — SELECT only, zero mutations ever |
+| 5 | **Lookup tables are read-only** | `customer`, `employee`, `product`, `pricehist` — SELECT only, zero mutations ever |
 | 6 | **SUPERADMIN is protected** | ADMIN cannot modify a SUPERADMIN account at UI or database level |
 | 7 | **Auto-provisioning** | New registrations are automatically USER / INACTIVE pending admin activation |
 | 8 | **Stamp is hidden from USER** | The `stamp` audit column is never shown to USER accounts in any view |
+| 9 | **All columns lowercase** | PostgreSQL normalizes all column names to lowercase — code uses lowercase throughout |
 
 ---
 
 ## 🧪 Testing
 
-Sprint 1 test coverage — **10 test cases** in `src/test/sprint1-auth-flows.test.jsx`:
-
-| Test Case | Description | Status |
-|-----------|-------------|--------|
-| TC-01 | Email registration — shows confirmation screen | ✅ Pass |
-| TC-02 | Empty form submission — shows all validation errors | ✅ Pass |
-| TC-03 | Password mismatch — shows error | ✅ Pass |
-| TC-04 | Wrong credentials — shows friendly error | ✅ Pass |
-| TC-05 | Empty login fields — shows validation errors | ✅ Pass |
-| TC-06 | Google OAuth button — triggers signInWithOAuth | ✅ Pass |
-| TC-07 | Login guard — signs out INACTIVE account | ✅ Pass |
-| TC-08 | Login guard — allows ACTIVE account through | ✅ Pass |
-| TC-09 | Provision defaults — correct USER/INACTIVE rights | ✅ Pass |
-| TC-10 | Duplicate email — shows friendly error | ✅ Pass |
-
-Sprint 2 will add **39 test cases** covering all 3 user types × 13 rights.
+| Sprint | Test File | Cases | Status |
+|--------|-----------|-------|--------|
+| Sprint 1 | `sprint1-auth-flows.test.jsx` | 10 | ✅ All Pass |
+| Sprint 2 | `sprint2-rights-39-cases.test.js` | 39 | ✅ All Pass |
+| Sprint 2 | `sprint2-cascade-visibility.test.js` | 13 | ✅ All Pass |
 
 ---
 
@@ -456,6 +470,7 @@ Sprint 2 will add **39 test cases** covering all 3 user types × 13 rights.
 | **Project Type** | Capstone Project |
 | **Instructor** | Jeremias C. Esperanza |
 | **Sprint Plan** | 3 Sprints × 2 Weeks = 6 Weeks Total |
+| **Live URL** | https://hopesms-chi.vercel.app |
 
 ---
 
@@ -463,5 +478,7 @@ Sprint 2 will add **39 test cases** covering all 3 user types × 13 rights.
 
 **Hope, Inc. Sales Management System**
 *New Era University · BS Information Technology · AY 2025–2026*
+
+🌐 [hopesms-chi.vercel.app](https://hopesms-chi.vercel.app)
 
 </div>
