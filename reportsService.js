@@ -1,4 +1,4 @@
-// M1 PR-02: feat/reports-api
+// M1 Santiago, Michael E. -- PR-02: feat/reports-api
 // reportsService.js — All 4 report service functions.
 // Each queries a dedicated SQL view created by M3 PR-01 (db/views-reports-3).
 // All functions are read-only — no insert, update, or delete.
